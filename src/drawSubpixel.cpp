@@ -87,7 +87,7 @@ void SubpixelWorkspace::drawTempCircle(double row, double col, double radius, co
     int zoomedCol = int(round((col - leftColumn) * zoomScale + zoomScale / 2.0));
     int zoomedRadius = int(round(radius * zoomScale));
 
-    if (not retTemp) {
+    if (!retTemp) {
         temporaryImg = zoomedImage.clone();
         retTemp = true;
     }
@@ -109,7 +109,7 @@ void SubpixelWorkspace::drawTempPoint(double row, double col, const cv::Scalar &
     int zoomedRow = int(round((row - leftRow) * zoomScale + zoomScale / 2.0));
     int zoomedCol = int(round((col - leftColumn) * zoomScale + zoomScale / 2.0));
 
-    if (not retTemp) {
+    if (!retTemp) {
         temporaryImg = zoomedImage.clone();
         retTemp = true;
     }
@@ -131,7 +131,7 @@ void SubpixelWorkspace::drawTempLine(double rowStart, double colStart, double ro
     int zoomedRowEnd = int(round((rowEnd - leftRow) * zoomScale + zoomScale / 2.0));
     int zoomedColEnd = int(round((colEnd - leftColumn) * zoomScale + zoomScale / 2.0));
 
-    if (not retTemp) {
+    if (!retTemp) {
         temporaryImg = zoomedImage.clone();
         retTemp = true;
     }
@@ -213,7 +213,7 @@ void SubpixelWorkspace::drawTempEllipse(double row, double col, double phi, doub
     int zoomedShortRad = int(round(shortRadius * zoomScale));
     int zoomedLongRad = int(round(longRadius * zoomScale));
 
-    if (not retTemp) {
+    if (!retTemp) {
         temporaryImg = zoomedImage.clone();
         retTemp = true;
     }
