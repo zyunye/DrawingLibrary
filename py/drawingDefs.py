@@ -1,0 +1,15 @@
+
+# These are all in BGR format
+COLOR_BLUE = (255,0,0)
+COLOR_GREEN = (0,255,0)
+COLOR_RED = (0,0,255)
+COLOR_BLACK=(0,0,0)
+COLOR_DARKVIOLET = (211,0,148)
+COLOR_ORANGE = (255,165,0)
+COLOR_CYAN = (0,255,255)
+COLOR_WHITE=(255,255,255)
+
+POINT_RADIUS=3
+
+def reverse(pt):
+    return pt[::-1]
