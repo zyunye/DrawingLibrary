@@ -3,19 +3,21 @@ import math
 import cv2
 from numpy.typing import NDArray
 
-from DrawingLibrary.py.drawingDefs import COLOR_GREEN, POINT_RADIUS, COLOR_BLUE
+from .drawingDefs import COLOR_GREEN, POINT_RADIUS, COLOR_BLUE
 
 
 class SubpixelWorkspace:
-    def __init__(self, img: NDArray, row: float, col: float, scale: int, buffer: int):
+    def __init__(self, img: NDArray, row: float, col: float, scale: int, rowBuffer: int, colBuffer: int):
         self.zoomScale = scale
-        self.buffer = buffer
+        # self.buffer = buffer
+        self.rowBuffer = rowBuffer
+        self.colBuffer = colBuffer
         self.retTemp = False
 
-        leftR = row - buffer
-        leftC = col - buffer
-        rightR = row + buffer
-        rightC = col + buffer
+        leftR = row - rowBuffer
+        leftC = col - colBuffer
+        rightR = row + rowBuffer
+        rightC = col + colBuffer
 
         imgShape = img.shape
         imgHeight = imgShape[0]
@@ -24,23 +26,27 @@ class SubpixelWorkspace:
 
         # Non throwing bounds enforcement. Will compress the buffer to fit within the confines of the image silently.
         if minExtent < 0 or rightC >= imgWidth or rightR >= imgHeight:
-            differences = []
+            # differences = []
+            row_diffs = [rowBuffer, rowBuffer]
+            col_diffs = [colBuffer, colBuffer]
 
             if leftR < 0:
-                differences.append(buffer - abs(leftR))
+                row_diffs[0] = rowBuffer - abs(leftR)
             if rightR >= imgHeight:
-                differences.append(buffer - (rightR - imgHeight))
+                row_diffs[1] = rowBuffer - (rightR - imgHeight)
             if leftC < 0:
-                differences.append(buffer - abs(leftC))
+                col_diffs[0] =colBuffer - abs(leftC)
             if rightC >= imgWidth:
-                differences.append(buffer - (rightC - imgWidth))
+                col_diffs[1] = colBuffer - (rightC - imgWidth)
 
-            absDiff = int(min(differences))
+            # absDiff = int(min(differences))
+            min_row_diff = int(min(row_diffs))
+            min_col_diff = int(min(col_diffs))
 
-            leftR = row - absDiff
-            leftC = col - absDiff
-            rightR = row + absDiff
-            rightC = col + absDiff
+            leftR = row - min_row_diff
+            leftC = col - min_col_diff
+            rightR = row + min_row_diff
+            rightC = col + min_col_diff
 
         leftR = round(leftR)
         leftC = round(leftC)
@@ -48,7 +54,7 @@ class SubpixelWorkspace:
         rightC = round(rightC)
 
         self.zoomedImage = img[leftR:rightR, leftC:rightC]
-        self.zoomedImage = cv2.resize(self.zoomedImage, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST)
+        self.zoomedImage = cv2.resize(self.zoomedImage, dsize=None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST)
         self.leftRow = leftR
         self.leftColumn = leftC
         self.temporaryImg = self.zoomedImage.copy()
